@@ -16,13 +16,15 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
@@ -39,12 +41,25 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add Outputs Inputs/Edge_Corrected Inputs/MLI_only
+          paths=(Outputs Inputs/Edge_Corrected Inputs/MLI_only)
+          existing_paths=()
+          for path in "${paths[@]}"; do
+            if [ -e "$path" ]; then
+              existing_paths+=("$path")
+            fi
+          done
+
+          if [ "${#existing_paths[@]}" -eq 0 ]; then
+            echo "No generated directories found to stage."
+            exit 0
+          fi
+
+          git add -A "${existing_paths[@]}"
           if git diff --cached --quiet; then
             echo "No generated data changes to commit."
           else
             git commit -m "ci: update generated analysis outputs"
-            git push
+            git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
 
       - name: Upload outputs artifact
