@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import sys
 from pathlib import Path
+
+# Ensure scripts directory is in path for imports
+scripts_dir = Path(__file__).parent
+if str(scripts_dir) not in sys.path:
+    sys.path.insert(0, str(scripts_dir))
 
 from full_pipeline import raw_config_path, run_full_pipeline
 

@@ -4,11 +4,17 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Optional
 
 import numpy as np
+
+# Ensure scripts directory is in path for imports
+scripts_dir = Path(__file__).parent
+if str(scripts_dir) not in sys.path:
+    sys.path.insert(0, str(scripts_dir))
 
 from edge_cleanup import load_allowed_colors, process_single_slice as edge_process_single_slice
 from mli_only_from_edge_corrected import (
