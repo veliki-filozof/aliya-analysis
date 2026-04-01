@@ -14,6 +14,8 @@ on:
 jobs:
   run-analysis:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout
@@ -32,6 +34,18 @@ jobs:
       - name: Run all available pinceaux analyses
         run: |
           python scripts/run_all_pinceaux.py
+
+      - name: Commit generated analysis data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Outputs Inputs/Edge_Corrected Inputs/MLI_only
+          if git diff --cached --quiet; then
+            echo "No generated data changes to commit."
+          else
+            git commit -m "ci: update generated analysis outputs"
+            git push
+          fi
 
       - name: Upload outputs artifact
         uses: actions/upload-artifact@v4
