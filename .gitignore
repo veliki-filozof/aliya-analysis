@@ -1,0 +1,16 @@
+# Python cache and environments
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+
+# Notebook cache
+.ipynb_checkpoints/
+
+# OS/editor clutter
+.DS_Store
+Thumbs.db
+
+# Keep generated artifacts out of root by default
+*.log

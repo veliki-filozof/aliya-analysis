@@ -1,0 +1,19 @@
+# Ignore everything under Inputs by default
+*
+!*/
+!.gitignore
+
+# Keep source-of-truth metadata needed for analysis
+!pinceaux_*.json
+
+# Keep raw datasets and per-pinceaux configs
+!Raw/
+Raw/*
+!Raw/**
+
+# Ignore generated intermediate folders
+Edge_Corrected/
+MLI_only/
+
+# Ignore generated global scale metadata (if produced locally)
+scale_metadata.json
