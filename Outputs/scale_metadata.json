@@ -1,0 +1,8 @@
+{
+  "pinceaux_id": 4,
+  "scale_um": 2.0,
+  "scale_px": 126.0,
+  "um_per_px": 0.015873015873015872,
+  "nm_per_px": 15.873015873015872,
+  "uniform_across_slices": true
+}
