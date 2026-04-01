@@ -30,7 +30,7 @@ def discover_pinceaux_ids(raw_root: Path) -> list[int]:
 
 
 def main() -> None:
-    base_dir = Path(__file__).resolve().parent
+    base_dir = Path(__file__).resolve().parent.parent
     raw_root = base_dir / "Inputs" / "Raw"
     if not raw_root.exists():
         raise FileNotFoundError(f"Raw inputs root not found: {raw_root}")

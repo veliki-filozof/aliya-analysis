@@ -325,7 +325,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--base-dir",
         type=Path,
-        default=Path(__file__).resolve().parent,
+        default=Path(__file__).resolve().parent.parent,
         help="Repository root directory",
     )
     return parser.parse_args()

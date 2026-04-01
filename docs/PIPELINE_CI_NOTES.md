@@ -23,7 +23,7 @@ Required keys:
 2. Run full pipeline locally with explicit inputs and `--write-config`:
 
 ```bash
-python full_pipeline.py --id X --scale-um <um> --scale-px <px> --slice-thickness-nm 40 --z-first <z0> --z-last <zN> --capture-order ascending --write-config
+python scripts/full_pipeline.py --id X --scale-um <um> --scale-px <px> --slice-thickness-nm 40 --z-first <z0> --z-last <zN> --capture-order ascending --write-config
 ```
 
 This writes `analysis_config.json` into the same raw folder.
@@ -31,7 +31,7 @@ This writes `analysis_config.json` into the same raw folder.
 3. Commit and push raw folder + config to GitHub.
 
 ## CI run behavior
-- CI executes `run_all_pinceaux.py`.
+- CI executes `scripts/run_all_pinceaux.py`.
 - It scans all `Inputs/Raw/pinceaux_*` folders.
 - It processes folders that have both:
   - PNG slices, and
@@ -42,5 +42,5 @@ This writes `analysis_config.json` into the same raw folder.
 Once config exists, explicit inputs are optional:
 
 ```bash
-python full_pipeline.py --id X
+python scripts/full_pipeline.py --id X
 ```

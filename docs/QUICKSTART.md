@@ -54,7 +54,7 @@ python scripts/full_pipeline.py \
   --z-first 0 \
   --z-last 7.2 \
   --capture-order ascending \
-  --slice-thickness 40 \
+  --slice-thickness-nm 40 \
   --write-config
 ```
 
@@ -102,7 +102,7 @@ Outputs/pinceaux_X/
 | `z-first` | 0 | Z coordinate of first slice |
 | `z-last` | 7.2 | Z coordinate of last slice |
 | `capture-order` | ascending | `ascending` or `descending` |
-| `slice-thickness` | 40 | Slice thickness in **nanometers** |
+| `slice-thickness-nm` | 40 | Slice thickness in **nanometers** |
 
 ## Troubleshooting
 

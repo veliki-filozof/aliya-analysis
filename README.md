@@ -98,7 +98,7 @@ python scripts/full_pipeline.py \
   --z-first 0 \
   --z-last 7.2 \
   --capture-order ascending \
-  --slice-thickness 40
+  --slice-thickness-nm 40
 ```
 
 **Parameters:**
@@ -108,7 +108,7 @@ python scripts/full_pipeline.py \
 - `--z-first` – Z-coordinate of first slice
 - `--z-last` – Z-coordinate of last slice
 - `--capture-order` – `ascending` or `descending`
-- `--slice-thickness` – Thickness between slices (nanometers)
+- `--slice-thickness-nm` – Thickness between slices (nanometers)
 - `--write-config` – Save parameters to `Inputs/Raw/pinceaux_X/analysis_config.json`
 
 ### Batch Processing (All Pinceaux)
