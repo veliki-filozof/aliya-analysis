@@ -1,0 +1,9 @@
+{
+  "pinceaux_id": 21,
+  "scale_um": 3.0,
+  "scale_px": 77.0,
+  "slice_thickness_nm": 40.0,
+  "z_first": 223.0,
+  "z_last": 273.0,
+  "capture_order": "ascending"
+}
