@@ -1,3 +1,5 @@
+## Temporarily overriden .yml file to prevent CI runs and preserve output data
+
 name: Run Pinceaux Analysis
 
 on:
