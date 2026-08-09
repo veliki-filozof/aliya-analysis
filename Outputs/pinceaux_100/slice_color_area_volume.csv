@@ -1,0 +1,4 @@
+slice_file,color_hex,area_px,cross_section_area_um2,slice_volume_um3,slice_thickness_um
+z_0001_1.000000.png,#ed755c,1,1.000000,1.000000,1.000000
+z_0002_250.500000.png,#ed755c,4,4.000000,4.000000,1.000000
+z_0003_500.000000.png,#ed755c,8,8.000000,8.000000,1.000000

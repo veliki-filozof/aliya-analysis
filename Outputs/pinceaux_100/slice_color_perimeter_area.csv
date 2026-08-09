@@ -1,0 +1,4 @@
+slice_file,color_hex,blob_count,perimeter_px,perimeter_um,slice_area_um2,slice_thickness_um
+z_0001_1.000000.png,#ed755c,1,2.828427,2.828427,2.828427,1.000000
+z_0002_250.500000.png,#ed755c,1,6.828427,6.828427,6.828427,1.000000
+z_0003_500.000000.png,#ed755c,2,13.656854,13.656854,13.656854,1.000000
