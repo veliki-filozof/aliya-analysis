@@ -22,6 +22,7 @@ from mli_only_from_edge_corrected import (
     write_scale_metadata,
 )
 from perimeter_area_step4 import analyze_pinceaux
+from compute_sa_to_v import compute_sa_to_v
 
 
 @dataclass
@@ -288,6 +289,13 @@ def run_full_pipeline(
         z_last=config.z_last,
         capture_order=config.capture_order,
     )
+
+    # Compute surface-area-to-volume ratios and plot per-color
+    try:
+        compute_sa_to_v(base_dir=base_dir, pinceaux_id=pinceaux_id)
+        print(f"SA:V computation completed and saved in Outputs/pinceaux_{pinceaux_id}")
+    except Exception as exc:
+        print(f"SA:V computation skipped/error: {exc}")
 
     if write_config:
         cfg_path = write_raw_config(base_dir, pinceaux_id, config)
