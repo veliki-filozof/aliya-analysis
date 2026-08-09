@@ -13,6 +13,11 @@ from typing import Dict, List, Set, Tuple
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image, ImageDraw
+try:
+    from skimage import measure  # type: ignore
+    HAS_SKIMAGE = True
+except Exception:
+    HAS_SKIMAGE = False
 
 RGB = Tuple[int, int, int]
 WHITE: RGB = (255, 255, 255)
@@ -36,7 +41,7 @@ class Step4Error(RuntimeError):
 class BlobResult:
     color: RGB
     perimeter_px: float
-    contour_points: List[Tuple[int, int]]
+    contour_points: np.ndarray
 
 
 def to_rgb_array(img_path: Path) -> np.ndarray:
@@ -139,76 +144,50 @@ def find_start_boundary(mask: np.ndarray) -> Tuple[int, int]:
     raise Step4Error("Boundary start not found for non-empty component")
 
 
-def trace_boundary(component_mask: np.ndarray) -> List[Tuple[int, int]]:
-    # Moore-neighbor tracing on padded mask
-    padded = np.pad(component_mask.astype(np.uint8), 1, mode="constant", constant_values=0)
-    sy, sx = find_start_boundary(component_mask)
-    sy += 1
-    sx += 1
+def trace_boundary(component_mask: np.ndarray) -> np.ndarray:
+    # Require marching-squares (skimage.measure.find_contours) for contours.
+    if not HAS_SKIMAGE:
+        raise Step4Error(
+            "scikit-image is required for contour extraction. Install scikit-image and retry."
+        )
 
-    current = (sy, sx)
-    backtrack = (sy, sx - 1)  # west
-    start = current
-    start_backtrack = backtrack
+    # find_contours returns a list of (N,2) arrays in (row, col) float coords
+    contours = measure.find_contours(component_mask.astype(np.uint8), 0.5)
+    if not contours:
+        raise Step4Error("No contour found for component")
 
-    boundary: List[Tuple[int, int]] = []
-    max_steps = int(component_mask.size * 8)
+    valid_contours = [c for c in contours if c.shape[0] >= 2]
+    if not valid_contours:
+        raise Step4Error("No valid contour found for component")
 
-    for _ in range(max_steps):
-        cy, cx = current
-        boundary.append((cy - 1, cx - 1))
+    pieces = []
+    for contour in valid_contours:
+        if pieces:
+            pieces.append(np.array([[np.nan, np.nan]], dtype=float))
+        pieces.append(contour.astype(float, copy=False))
 
-        rel_back = (backtrack[0] - cy, backtrack[1] - cx)
-        try:
-            start_idx = NEIGHBORS_8.index(rel_back)
-        except ValueError:
-            start_idx = 7
-
-        found_next = False
-        next_pixel = current
-        next_backtrack = backtrack
-
-        for step in range(1, 9):
-            idx = (start_idx + step) % 8
-            dy, dx = NEIGHBORS_8[idx]
-            ny, nx = cy + dy, cx + dx
-            if padded[ny, nx] == 1:
-                prev_idx = (idx - 1) % 8
-                pdy, pdx = NEIGHBORS_8[prev_idx]
-                next_backtrack = (cy + pdy, cx + pdx)
-                next_pixel = (ny, nx)
-                found_next = True
-                break
-
-        if not found_next:
-            break
-
-        backtrack = next_backtrack
-        current = next_pixel
-
-        if current == start and backtrack == start_backtrack:
-            break
-
-    if len(boundary) < 2:
-        by, bx = np.where(component_mask)
-        return list(zip(by.tolist(), bx.tolist()))
-
-    return boundary
+    return np.vstack(pieces)
 
 
-def contour_length_px(points: List[Tuple[int, int]]) -> float:
-    if len(points) < 2:
+def contour_length_px(points: np.ndarray) -> float:
+    if points.shape[0] < 2:
         return 0.0
 
     length = 0.0
-    for i in range(1, len(points)):
-        y0, x0 = points[i - 1]
-        y1, x1 = points[i]
-        length += math.hypot(x1 - x0, y1 - y0)
 
-    y0, x0 = points[-1]
-    y1, x1 = points[0]
-    length += math.hypot(x1 - x0, y1 - y0)
+    start_index = 0
+    for index in range(points.shape[0] + 1):
+        is_break = index == points.shape[0] or np.isnan(points[index]).any()
+        if not is_break:
+            continue
+
+        contour = points[start_index:index]
+        if contour.shape[0] >= 2:
+            diffs = np.diff(contour, axis=0)
+            length += float(np.sqrt(np.sum(diffs ** 2, axis=1)).sum())
+            length += float(math.hypot(*(contour[-1] - contour[0])))
+
+        start_index = index + 1
     return length
 
 
@@ -234,11 +213,23 @@ def draw_contours(image_shape: Tuple[int, int, int], blobs: List[BlobResult], ou
     draw = ImageDraw.Draw(canvas)
 
     for blob in blobs:
-        if len(blob.contour_points) < 2:
+        contour_points = blob.contour_points
+        if contour_points.shape[0] < 2:
             continue
-        xy = [(x, y) for y, x in blob.contour_points]
-        xy.append((blob.contour_points[0][1], blob.contour_points[0][0]))
-        draw.line(xy, fill=blob.color, width=3)
+
+        start_index = 0
+        for index in range(contour_points.shape[0] + 1):
+            is_break = index == contour_points.shape[0] or np.isnan(contour_points[index]).any()
+            if not is_break:
+                continue
+
+            contour = contour_points[start_index:index]
+            if contour.shape[0] >= 2:
+                xy = [(float(x), float(y)) for y, x in contour]
+                xy.append((float(contour[0][1]), float(contour[0][0])))
+                draw.line(xy, fill=blob.color, width=1)
+
+            start_index = index + 1
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     canvas.save(output_path)
