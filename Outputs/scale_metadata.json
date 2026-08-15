@@ -1,8 +1,8 @@
 {
-  "pinceaux_id": 91,
+  "pinceaux_id": 82,
   "scale_um": 3.0,
-  "scale_px": 88.0,
-  "um_per_px": 0.03409090909090909,
-  "nm_per_px": 34.090909090909086,
+  "scale_px": 99.0,
+  "um_per_px": 0.030303030303030304,
+  "nm_per_px": 30.303030303030305,
   "uniform_across_slices": true
 }
