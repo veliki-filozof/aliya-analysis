@@ -1,8 +1,8 @@
 {
-  "scale_um": 1.0,
-  "scale_px": 1.0,
-  "slice_thickness_nm": 1000.0,
+  "scale_um": 3.0,
+  "scale_px": 77.0,
+  "slice_thickness_nm": 40.0,
   "z_first": 1.0,
-  "z_last": 500.0,
+  "z_last": 4.0,
   "capture_order": "ascending"
 }

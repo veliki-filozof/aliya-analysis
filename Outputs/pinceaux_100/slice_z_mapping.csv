@@ -1,4 +1,5 @@
 slice_index,original_filename,processed_filename,z_coordinate
-1,1x1 square.png,z_0001_1.000000.png,1.000000
-2,2x2 square.png,z_0002_250.500000.png,250.500000
-3,two 2x2 squares.png,z_0003_500.000000.png,500.000000
+1,bandicam 2026-03-31 21-35-20-270.png,z_0001_1.000000.png,1.000000
+2,bandicam 2026-03-31 21-35-22-172.png,z_0002_2.000000.png,2.000000
+3,bandicam 2026-03-31 21-35-24-281.png,z_0003_3.000000.png,3.000000
+4,bandicam 2026-03-31 21-35-26-255.png,z_0004_4.000000.png,4.000000
