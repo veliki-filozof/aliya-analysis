@@ -1178,6 +1178,9 @@ def compute_sa_to_v(base_dir: Path, pinceaux_id: int) -> Path:
             pinceau. A small number of pixels have by chance been transformed into an allowed color during image
             compression, which resulted in faulty detection by the edge correction algorithm. Such MLIs should
             be disregarded and removed from the analysis.
+    
+    Once these errors have been accounted for and corrected, any remaining high SA:V ratios correspond to 
+    MLIs that have an elongated shape, which is a physically reasonable outcome.
     """
     base_dir = Path(base_dir)
     output_dir = base_dir / "Outputs" / f"pinceaux_{pinceaux_id}"
