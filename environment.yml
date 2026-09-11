@@ -1,4 +1,4 @@
-name: aliya-analysis
+name: pinceau-analysis
 channels:
   - conda-forge
   - defaults
